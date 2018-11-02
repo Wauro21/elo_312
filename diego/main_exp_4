@@ -1,0 +1,55 @@
+void main(void)
+{
+	osc_init_xt2();
+	WDTCTL = WDTPW + WDTHOLD;
+	TBCTL = TBSSEL_2 + MC_1;
+	TBCCR0 = 0xFFFF;	
+	display_init();
+	char algo = display_wait_BF();
+	
+	
+	//TACCTL0 = CCIE;              // CCR0 habilita interrupción del timer
+//	TACCR0 = 32768 >> 2;
+//	TACTL = TASSEL_1 + MC_1;   // reloj auxiliar, modo up to CCR0
+
+//	display_test_Write_CGRAM_MS();
+//	display_set_pos(0x00);
+//	printf("LAB ELO312");
+//	printf("%c",0x01);
+	
+	//Lab
+//	TBR=0;
+//	udelay(0);
+//	TBR=0;
+//	udelay(4);
+//	TBR=0;
+//	udelay(32);
+//	TBR=0;
+//	udelay(64);
+//	TBR=0;	
+//	udelay(40);
+//	TBR=0;
+//	udelay(1000);
+//	TBR=0;
+//	_BIS_SR(LPM0_bits + GIE);  // modo bajo consumo
+
+
+    // interrupciones
+}
+
+//// Timer A0 rutina de servicio de interrupción
+//#pragma vector = TIMERA0_VECTOR
+//__interrupt void Timer_A (void)
+//{
+//	P2OUT ^= 0x1;
+//}
+
+//#pragma vector = TIMERB0_VECTOR
+//__interrupt void Timer_B (void)
+//{
+//	static unsigned int i=0;
+//  	int tbr = TBR;
+//	if (i<5)
+//		udelay(i++);
+//	int dif = TBR - tbr;
+//}
