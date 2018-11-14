@@ -125,7 +125,10 @@ unsigned char display_wait_BF(void)
 **************************************************/
 void display_clear(void)
 {
-	// fill in
+  RST_BIT(LCD_RS);
+  RST_BIT(LCD_RW);
+  LCD_WRITE(0x01);
+  // No probada
 }
 
 
@@ -153,7 +156,9 @@ void display_right_shift(void)
 **************************************************/
 void display_left_shift(void)
 {
-	//fill in
+  RST_BIT(LCD_RS);
+  RST_BIT(LCS_RW);
+  LCD_WRITE(0x1C);
 }
 
 /**************************************************
