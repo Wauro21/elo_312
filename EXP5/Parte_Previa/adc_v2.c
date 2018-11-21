@@ -116,7 +116,7 @@ void adc_init_single_channel_single_conv_it()
 * Descripción		: Inicia la conversión de un canal, cuyo resultado
 * será capturado en la rutina de interrupción.
 **************************************************/
-void adc_single_channel_single_conv_it(int ch)
+int adc_single_channel_single_conv_it(int ch)
 {
 	ADC12CTL0 &= ~ENC;
 	ADC12MCTL0 &= 0xF0; 		// Se limpia canal anterior
