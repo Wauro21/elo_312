@@ -74,7 +74,7 @@ void adc_init_single_channel_single_conv()
     P6DIR &= 0x00;
     ADC12CTL0 &= ~ENC;
     ADC12CTL0 = SHT1_15 | SHT0_15 | ADC12ON; //Sample hold -> 1024 c
-    ADC12CTL1 = CSTARTADD_0 | SHS_0 | SHP | ADC12DIV_7 | ADC12SSEL_2 | CONSEQ_0;
+    ADC12CTL1 = CSTARTADD_0 | SHS_0 | SHP | ADC12DIV_7 | ADC12SSEL_0 | CONSEQ_0;
     //CONSEQx = 1 => MODO DEL ADC12: Secuencia de canales.
     ADC12MCTL0 = SREF_0;
     ADC12IE = 0x00; // deshabilitar interrupciones
@@ -102,7 +102,7 @@ void adc_init_single_channel_single_conv_it()
     P6DIR &= 0x00;
     ADC12CTL0 &= ~ENC;
     ADC12CTL0 = SHT1_15 | SHT0_15 | ADC12ON; //Sample hold -> 1024 ciclos de reloj
-    ADC12CTL1 = CSTARTADD_0 | SHS_0 | SHP | ADC12DIV_4 | ADC12SSEL_1 | CONSEQ_0; //ADC12SSEL -> ACLK ; ADC12DIV_4 = 4 -> 1024/[32768/4] =125 ms
+    ADC12CTL1 = CSTARTADD_0 | SHS_0 | SHP | ADC12DIV_7 | ADC12SSEL_0 | CONSEQ_0; //[NO APLICA] ADC12SSEL -> ACLK ; ADC12DIV_4 = 4 -> 1024/[32768/4] =125 ms
     //CONSEQx = 1 => MODO DEL ADC12: Secuencia de canales.
     ADC12MCTL0 = SREF_0;
     ADC12IE = 0x01; //Solo se esta escribiendo en ADD_0, por lo tanto, nos interesa solo ese flag
