@@ -25,8 +25,7 @@ void main(void)
 }
 
 
-#define CONV(x)      (4095,0/3,3)*x			// convertir x en voltaje
-
+#define CONV(x)      (3,3/4095,0)*x			// convertir x en voltaje
 // Timer A0 rutina de servicio de interrupción
 #pragma vector = TIMERA0_VECTOR
 __interrupt void Timer_A (void)
