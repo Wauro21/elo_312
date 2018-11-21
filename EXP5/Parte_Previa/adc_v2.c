@@ -21,6 +21,29 @@
 *
 ***************************************************/
 #include "adc.h"
+/***************************************************
+* Nombre del modulo: adc.c
+*
+* Modulo creado para la asignatura Elo312
+* Laboratorio de Estructura de Computadores
+* del departamento de Electrónica de la Universidad
+* Técnica Federico Santa María. El uso o copia
+* está permitido y se agracede mantener el nombre 
+* de los creadores.
+*
+* Escrito inicialmente el 01/01/2004 Por Michael Kusch & Wolfgang Freund
+* Modificado el 24/09/2014           Por Andrés Llico.
+* Modificado el 31/10/2017           Por Mauricio Solís
+*
+* Descripción del módulo:
+* Modulo driver adc
+* Contiene las funciones que permiten manejar el ADC
+***************************************************/
+
+/*  Include section
+*
+***************************************************/
+#include "adc.h"
 
 /*  Defines section
 *
@@ -102,7 +125,7 @@ void adc_init_single_channel_single_conv_it()
     P6DIR &= 0x00;
     ADC12CTL0 &= ~ENC;
     ADC12CTL0 = SHT1_15 | SHT0_15 | ADC12ON; //Sample hold -> 1024 ciclos de reloj
-    ADC12CTL1 = CSTARTADD_0 | SHS_0 | SHP | ADC12DIV_4 | ADC12SSEL_1 | CONSEQ_0; // ADC12SSEL -> ACLK ; ADC12DIV_4 = 4 -> 1024/[32768/4] =125 ms
+    ADC12CTL1 = CSTARTADD_0 | SHS_0 | SHP | ADC12DIV_7 | ADC12SSEL_0 | CONSEQ_0; // ADC12SSEL -> ACLK ; ADC12DIV_4 = 4 -> 1024/[32768/4] =125 ms
     //CONSEQx = 1 => MODO DEL ADC12: Secuencia de canales.
     ADC12MCTL0 = SREF_0;
     ADC12IE = 0xFF; //Activa todo lo relacionado a interrupciones.
@@ -116,16 +139,15 @@ void adc_init_single_channel_single_conv_it()
 * Descripción		: Inicia la conversión de un canal, cuyo resultado
 * será capturado en la rutina de interrupción.
 **************************************************/
-int adc_single_channel_single_conv_it(int ch)
+void adc_single_channel_single_conv_it(int ch)
 {
 	ADC12CTL0 &= ~ENC;
 	ADC12MCTL0 &= 0xF0; 		// Se limpia canal anterior
 	ADC12MCTL0 |= (ch & 0x0F);  // Selecciona canal a convertir
 	ADC12CTL0 |= ENC;           // habilita conversión
 	ADC12CTL0 |= ADC12SC;  //inicia conversion
-	while (ADC12CTL0 & ADC12SC);
-	
-	return ADC12MEM0;    		// Los resultados de la conversión
+	//while (ADC12CTL0 & ADC12SC);
+	  		// Los resultados de la conversión
 }
 
 /**************************************************
@@ -159,7 +181,7 @@ void adc_seq_channel_single_conv(int *results, int *ch)
 }
 
 
-
+#if 0
 /**************************************************
 * Nombre    		: __interrupt void adc_ADC12_interrupt(void)
 * returns			: void
@@ -175,4 +197,4 @@ __interrupt void adc_ADC12_interrupt(void)
 }
 //                                    //
 ////////////////////////////////////////
-
+#endif
