@@ -122,7 +122,7 @@ void adc_single_channel_single_conv_it(int ch)
 	ADC12MCTL0 &= 0xF0; 		// Se limpia canal anterior
 	ADC12MCTL0 |= (ch & 0x0F);  // Selecciona canal a convertir
 	ADC12CTL0 |= ENC;           // habilita conversión
-	ADC12CTL0 |= ADC12SC;
+	ADC12CTL0 |= ADC12SC;  //inicia conversion
 	while (ADC12CTL0 & ADC12SC);
 	
 	return ADC12MEM0;    		// Los resultados de la conversión
