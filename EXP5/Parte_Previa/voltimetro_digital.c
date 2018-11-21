@@ -25,7 +25,7 @@ void main(void)
 }
 
 
-#define CONV(x)      x			// convertir x en voltaje
+#define CONV(x)      (4095,0/3,3)*x			// convertir x en voltaje
 
 // Timer A0 rutina de servicio de interrupción
 #pragma vector = TIMERA0_VECTOR
@@ -46,7 +46,11 @@ __interrupt void Timer_B (void)
 #
 
 #pragma vector = ADC12_VECTOR
-__interrupt void ADC(void)
+__interrupt void ADC(void) //Cuando se escribe un valor en la memoria de ADC, se llama a la rutina y se envia el resultado a la pantalla
 {
-  
+	int pos = display_get_pos();
+	int d;
+	d = adc_single_channel_single_conv(0);
+	printf("Vol=%1.3f\n", CONV(d));
+	display_set_pos(pos);  
 }
