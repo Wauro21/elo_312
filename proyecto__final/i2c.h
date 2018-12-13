@@ -8,6 +8,6 @@
 
 // ---> Funciones < ---- //
 
-void i2c_init(unsigned int slave_address, int i2c_mode)
+void i2c_init(unsigned int slave_address, int i2c_mode);
 
 #endif
