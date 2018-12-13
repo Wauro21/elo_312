@@ -6,7 +6,7 @@
 #define IC2_SDA_PIN BIT1
 
 
-void i2c_init(unsigned int slave_address, bool i2c_mode)
+void i2c_init(unsigned int slave_address, int i2c_mode)
 {
   P3SEL |= I2C_SCL_PIN | I2C_SDA_PIN;
   U0CTL |= I2C + SYNC; //Inicialiazacion
