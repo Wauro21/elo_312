@@ -1,5 +1,6 @@
 // Driver I2C
-
+// -----> Includes    <------ //
+#include "i2c.h"
 // -----> Definitions <----- //
 #define IC2_SCL_PIN BIT3
 #define IC2_SDA_PIN BIT1
