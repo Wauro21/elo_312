@@ -2,6 +2,7 @@
 // -----> Includes    <------ //
 #include <msp430x16x.h>
 #include "i2c.h"
+
 // -----> Definitions <----- //
 #define I2C_SCL_PIN BIT3
 #define I2C_SDA_PIN BIT1
@@ -30,7 +31,7 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
 // Master read
 unsigned int* master_reads(unsigned int read_address)
 {
-  unsigned int data[2];T
+  unsigned int data[2];
   unsigned int counter = 0x00;
   U0CTL &= ~I2CEN; //Permite modificar ciertos registros
   I2CNDAT = 0x01 ; //Tamano direccion a leer
@@ -39,7 +40,7 @@ unsigned int* master_reads(unsigned int read_address)
   
   //Inicio transferencia
   I2CTCTL |= I2CSTT + I2CTRX; // Condicion start y modo transmision maestro
-  while(!i2c_is_busy()); //
+  while(!((I2CDCTL & I2CBUSY)==I2CBUSY)); //
   I2CIFG &= ~ARDYIFG;
   while((I2CIFG & TXRDYIFG) == 0);
   I2CDRB = read_address;
@@ -49,18 +50,15 @@ unsigned int* master_reads(unsigned int read_address)
   U0CTL |= MST; //Se apaga después de una condicion de stop
   I2CTCTL &= !I2CTRX; //Modo recepcion
   I2CTCTL |= I2CSTT + I2CSTP;
-  while(!i2c_is_busy());
+  while(!(I2CDCTL & I2CBUSY)==I2CBUSY);
   for(counter = 0; counter < BYTE_NUMBER; counter++)
   {
     while((I2CIFG & RXRDYIFG) == 0);
-    data[counte r] = I2CDRB;
+    data[counter] = I2CDRB;
   }
   while(I2CTCTL & I2CSTP);
   return data;
 }
 
 ////////////////////////////////////////////////////
-bool i2c_is_busy()
-{
-	return (I2CDCTL & I2CBUSY);
-}
+
