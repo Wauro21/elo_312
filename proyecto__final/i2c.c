@@ -7,6 +7,9 @@
 #define I2C_SCL_PIN BIT3
 #define I2C_SDA_PIN BIT1
 #define BYTE_NUMBER 0x02
+// ----> Variables utiles <---- //
+static unsigned int PWM[2];
+static unsigned int pwm_counter=0x00;
 //Funcion incializacion I2C
 void i2c_init(unsigned int slave_address, int i2c_mode)
 {
@@ -28,37 +31,22 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
   U0CTL |= I2CEN; //Activa modulo IC2
 }
 
-// Master read
-unsigned int* master_reads(unsigned int read_address)
+//Slave read
+unsigned int* slave_reads(unsigned int* save)
 {
-  unsigned int data[2];
-  unsigned int counter = 0x00;
-  U0CTL &= ~I2CEN; //Permite modificar ciertos registros
-  I2CNDAT = 0x01 ; //Tamano direccion a leer
-  U0CTL |= MST; //Modo maestro
-  U0CTL |= I2CEN;
-  
-  //Inicio transferencia
-  I2CTCTL |= I2CSTT + I2CTRX; // Condicion start y modo transmision maestro
-  while(!((I2CDCTL & I2CBUSY)==I2CBUSY)); //
-  I2CIFG &= ~ARDYIFG;
-  while((I2CIFG & TXRDYIFG) == 0);
-  I2CDRB = read_address;
-  while(!(I2CIFG & ARDYIFG));
-  // Se lee la información
-  I2CNDAT = BYTE_NUMBER;
-  U0CTL |= MST; //Se apaga después de una condicion de stop
-  I2CTCTL &= !I2CTRX; //Modo recepcion
-  I2CTCTL |= I2CSTT + I2CSTP;
-  while(!(I2CDCTL & I2CBUSY)==I2CBUSY);
-  for(counter = 0; counter < BYTE_NUMBER; counter++)
+  unsigned int count = 0x00;
+  for(count = 0x00; (count < 6); count++)
   {
-    while((I2CIFG & RXRDYIFG) == 0);
-    data[counter] = I2CDRB;
+    if(I2CDRB%3 != 0)
+    {
+      if((count == 0x01) | (count == 0x04))
+      {
+        *(PWM+count) = (I2CDRB<<8);
+      }
+      else
+      {
+        *(PWM + count) |= I2CDRB;
+      }
+    }
   }
-  while(I2CTCTL & I2CSTP);
-  return data;
 }
-
-////////////////////////////////////////////////////
-
