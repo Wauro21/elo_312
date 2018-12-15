@@ -31,14 +31,15 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
 unsigned int master_reads(unsigned int read_address)
 {
   unsigned int data = 0x00;
+  unsigned int counter = 0x00;
   U0CTL &= ~I2CEN; //Permite modificar ciertos registros
   I2CNDAT = 0x01 ; //Tamano direccion a leer
   U0CTL |= MST; //Modo maestro
-  UOCTL |= I2CEN;
+  U0CTL |= I2CEN;
   
   //Inicio transferencia
   I2CTCTL |= I2CSTT + I2CTRX; // Condicion start y modo transmision maestro
-  while(!(IC2DCTL & I2CBUSY)); // 
+  while(!(I2CDCTL & I2CBUSY)); //
   I2CIFG &= ~ARDYIFG;
   while((I2CIFG & TXRDYIFG) == 0);
   I2CDRB = read_address;
@@ -48,7 +49,7 @@ unsigned int master_reads(unsigned int read_address)
   U0CTL |= MST; //Se apaga después de una condicion de stop
   I2CTCTL &= !I2CTRX; //Modo recepcion
   I2CTCTL |= I2CSTT + I2CSTP;
-  while(!(IC2DCTL & I2CBUSY));
+  while(!(I2CDCTL & I2CBUSY));
   for(counter = 0; counter < BYTE_NUMBER; counter++)
   {
     while((I2CIFG & RXRDYIFG) == 0);
@@ -56,5 +57,4 @@ unsigned int master_reads(unsigned int read_address)
   }
   while(I2CTCTL & I2CSTP);
   return data;
-  
 }
