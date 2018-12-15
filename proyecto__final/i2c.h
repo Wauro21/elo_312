@@ -1,3 +1,4 @@
+
 #ifndef __I2C__H
 #define __I2C__H
 
@@ -9,6 +10,5 @@
 // ---> Funciones < ---- //
 
 void i2c_init(unsigned int slave_address, int i2c_mode);
-unsigned int* master_reads(unsigned int read_address);
-bool i2c_is_busy();
+void slave_reads(unsigned int* save);
 #endif
