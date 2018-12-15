@@ -9,5 +9,5 @@
 // ---> Funciones < ---- //
 
 void i2c_init(unsigned int slave_address, int i2c_mode);
-
+unsigned int master_reads(unsigned int read_address);
 #endif
