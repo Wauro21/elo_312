@@ -3,7 +3,7 @@
 #include <msp430x16x.h>
 #include "i2c.h"
 // -----> Definitions <----- //
-#define I2C_SCL_PIN BIT
+#define I2C_SCL_PIN BIT3
 #define I2C_SDA_PIN BIT1
 #define BYTE_NUMBER 0x02
 //Funcion incializacion I2C
@@ -28,9 +28,9 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
 }
 
 // Master read
-unsigned int master_reads(unsigned int read_address)
+unsigned int* master_reads(unsigned int read_address)
 {
-  unsigned int data = 0x00;
+  unsigned int data[2];
   unsigned int counter = 0x00;
   U0CTL &= ~I2CEN; //Permite modificar ciertos registros
   I2CNDAT = 0x01 ; //Tamano direccion a leer
