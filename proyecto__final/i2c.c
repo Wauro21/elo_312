@@ -5,7 +5,7 @@
 // -----> Definitions <----- //
 #define I2C_SCL_PIN BIT
 #define I2C_SDA_PIN BIT1
-#define BYTE_NUMBER
+#define BYTE_NUMBER 0x02
 //Funcion incializacion I2C
 void i2c_init(unsigned int slave_address, int i2c_mode)
 {
