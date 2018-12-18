@@ -34,6 +34,7 @@
 #include "osc.h"
 static unsigned int count = 0x00;
 static unsigned int PWM[6];
+statin unsigned int comm = 0x00;
 char TXData = 0xF0;
 char read_address = 0; 
 void main (void)
@@ -68,7 +69,15 @@ __interrupt void I2C_ISR(void)
    case  8: break;                          // Register Access Ready
    case 10: 
      //while(!((I2CIFG & RXRDYIFG)==RXRDYIFG));
-     slave_reads(PWM);
+     if(comm == 0x01)
+     {
+       read_address = I2CDRB;
+       comm = 0x00;
+     }
+     else
+     {
+      slave_reads(PWM); 
+     }
      TBCCR1=(19 + ((PWM[1]<<8)|PWM[0])*(3.3/4095)*65);
      //asm("NOP");
 //     if(((I2CDRB != 0x00)&&(I2CDRB != 0x02)))
@@ -113,7 +122,7 @@ __interrupt void I2C_ISR(void)
      break;
    case 14: break;                          // General Call
    case 16: 
-     //slave_reads(PWM);
+     comm = 0x01;
      break;                          // Start Condition
  }
 }
