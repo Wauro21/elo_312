@@ -32,6 +32,7 @@
 #include  "msp430_version.h"
 #include "i2c.h"
 #include "osc.h"
+#include <stdio.h>
 static unsigned int count = 0x00;
 static unsigned int PWM[6];
 char TXData = 0xF0;
@@ -40,15 +41,18 @@ void main (void)
 {
   WDTCTL = WDTPW + WDTHOLD;                 // Stop WDT
   osc_init_xt2();
+  display_init();
   i2c_init(0x48, I2C_SLAVE);
-  P4DIR = BIT1;
-  P6SEL |= 0X001;
+  display_send_data(0x30);
+  P4DIR |= BIT1;
+  P6SEL |= 0X01;
   P4SEL |= BIT1;
   TBCTL = TBSSEL_1 + MC_1;
   TBCCTL1 = OUTMOD_7;
   TBCCR0 = 654;
   TBCCR1 = 19;
-  
+  //display_set_pos(0x00);
+  //printf("hola");
   _BIS_SR(LPM0_bits + GIE);                 // Enter LPM0 w/ interrupt
 }
 
@@ -69,6 +73,11 @@ __interrupt void I2C_ISR(void)
    case 10: 
      //while(!((I2CIFG & RXRDYIFG)==RXRDYIFG));
      slave_reads(PWM);
+     if(PWM[0] != 0x00)
+     {
+       display_set_pos(0x00);
+       display_send_data(PWM[0]);
+     }
      TBCCR1=(19 + ((PWM[1]<<8)|PWM[0])*(3.3/4095)*65);
      //asm("NOP");
 //     if(((I2CDRB != 0x00)&&(I2CDRB != 0x02)))
