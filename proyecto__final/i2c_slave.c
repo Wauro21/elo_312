@@ -1,4 +1,4 @@
-// Driver I2C
+// Driver I2C - Basado en el driver creado por el Profesor Mauricio Solis.
 // -----> Includes    <------ //
 #include <msp430x16x.h>
 #include "i2c.h"
@@ -9,7 +9,7 @@
 #define BYTE_NUMBER 0x02
 // ----> Variables utiles <---- //
 
-//Funcion incializacion I2C
+// Funcion incializacion I2C
 void i2c_init(unsigned int slave_address, int i2c_mode)
 {
   P3SEL |= I2C_SCL_PIN | I2C_SDA_PIN;
@@ -34,7 +34,7 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
 //Slave read
 void slave_reads(unsigned int* save, unsigned int address)
 {
-  *(save + address + save_count) = I2CDRB;
+  *(save + address) = I2CDRB;
   if(save_count == 0x01)
   {
     save_count = 0;
