@@ -33,8 +33,8 @@
 #include "i2c.h"
 #include "osc.h"
 static unsigned int count = 0x00;
-static unsigned int PWM[6];
-statin unsigned int comm = 0x00;
+static unsigned int PWM[3];
+static unsigned int comm = 0x00;
 char TXData = 0xF0;
 char read_address = 0; 
 void main (void)
@@ -59,26 +59,38 @@ void main (void)
 __interrupt void I2C_ISR(void)
 {
   
-  int count = 0;
   int index = 0;
  switch( I2CIV )
  {
    case  2: break;                          // Arbitration lost
    case  4: break;                          // No Acknowledge
    case  6: break;                          // Own Address
-   case  8: break;                          // Register Access Ready
+   case  8:
+     comm = 0x00;
+     break;                          // Register Access Ready
    case 10: 
      //while(!((I2CIFG & RXRDYIFG)==RXRDYIFG));
-     if(comm == 0x01)
+     if(count < 3)
      {
-       read_address = I2CDRB;
-       comm = 0x00;
+       PWM[count] = I2CDRB;
+       count = count + 1;
      }
      else
      {
-      slave_reads(PWM); 
+       //PWM[0] = I2CDRB;
+       count = 0;
      }
-     TBCCR1=(19 + ((PWM[1]<<8)|PWM[0])*(3.3/4095)*65);
+     TBCCR1=(19 + ((PWM[2]<<8)|PWM[1])*(3.3/4095)*65);
+     //     if(comm == 0x01)
+//     {
+//       read_address = I2CDRB;
+//       comm = 0x00;
+//     }
+//     else
+//     {
+//      slave_reads(PWM, read_address); 
+//     }
+//     TBCCR1=(19 + ((PWM[1]<<8)|PWM[0])*(3.3/4095)*65);
      //asm("NOP");
 //     if(((I2CDRB != 0x00)&&(I2CDRB != 0x02)))
 //     {
