@@ -9,7 +9,7 @@
 #define BYTE_NUMBER 0x02
 // ----> Variables utiles <---- //
 //static unsigned int PWM[2];
-static unsigned int pwm_counter=0;
+static unsigned int save_count=0;
 //Funcion incializacion I2C
 void i2c_init(unsigned int slave_address, int i2c_mode)
 {
@@ -17,10 +17,10 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
   U0CTL |= I2C + SYNC; //Inicialiazacion
   U0CTL &= ~I2CEN; // Apaga modulo I2C, para modificar registros
   I2CTCTL |= I2CSSEL1; //Reloj SMCLK
-  I2CIE = TXRDYIE | RXRDYIE; // Interrupciones reception/transmision
+  I2CIE = STTIFG | RXRDYIE | ARDYIFG; // Interrupciones reception/transmision
   if(i2c_mode)
   {
-    I2CNDAT = 0x02; //Cantidad de bytes transferidos
+    I2CNDAT = 0x03; //Cantidad de bytes transferidos
     I2CSA   = slave_address; //Direccion slave
   }
   else
@@ -33,14 +33,19 @@ void i2c_init(unsigned int slave_address, int i2c_mode)
 }
 
 //Slave read
-void slave_reads(unsigned int* save)
+void slave_reads(unsigned int* save, unsigned int address)
 {
-  unsigned int count = 0;
-  for(count =0; count <3; count++)
+  *(save + address + save_count) = I2CDRB;
+  if(save_count == 0x01)
   {
-    *(save + count) = I2CDRB;
-     }
+    save_count = 0;
   }
+  else
+  {
+    save_count = save_count+ 0x01;
+  }
+  
+}
     //  while(!((I2CIFG & RXRDYIFG)==RXRDYIFG));
 //  unsigned int count = 0x00;
 //  for(count = 0x00; (count < 6); count++)
