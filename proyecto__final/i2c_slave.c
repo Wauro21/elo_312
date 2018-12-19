@@ -8,7 +8,7 @@
 #define I2C_SDA_PIN BIT1
 #define BYTE_NUMBER 0x02
 // ----> Variables utiles <---- //
-
+static contador_save = 0x00;
 // Funcion incializacion I2C
 void i2c_init(unsigned int slave_address, int i2c_mode)
 {
@@ -43,4 +43,10 @@ void slave_reads(unsigned int* save, unsigned int address)
   {
     save_count = save_count+ 0x01;
   } 
+}
+
+// PWM 
+void pwm_change(unsigned int * PWM)
+{
+  TBCCR1=(19 + ((PWM[2]<<8)|PWM[1])*(3.3/4095)*65);
 }
