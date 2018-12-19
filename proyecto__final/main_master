@@ -18,17 +18,17 @@ void main (void)
   CCR0 = 32-1;
   
   TACTL = TASSEL_1 + MC_1;    // reloj ACLK, modo up to CCR0
-  adc_init_single_channel_single_conv();
+  adc_init_single_channel_single_conv(); // Inicializa el ADC en modo de conversión simple de un solo canal.
   
   
-  i2c_init(0x48, I2C_MASTER);
+  i2c_init(0x48, I2C_MASTER);   // Setea registros para definir msp como master
 
   _BIS_SR(LPM0_bits + GIE);	// modo bajo consumo
   
   
   
   
-  _EINT();                                  // Enable interrupts
+  _EINT();                                  // Habilita interrupciones
   
 
 }
