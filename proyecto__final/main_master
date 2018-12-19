@@ -3,9 +3,6 @@
 #include  <msp430x16x.h>
 #include "i2c.h"
 
-char RXData = 0;
-char TestDa0x48ta = 0;
-
 
 int data[2];
 void main (void)
