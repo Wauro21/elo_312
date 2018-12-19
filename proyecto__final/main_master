@@ -25,19 +25,11 @@ void main (void)
 
   _BIS_SR(LPM0_bits + GIE);	// modo bajo consumo
   
-  
-  
-  
   _EINT();                                  // Enable interrupts
   
-  
-    //i2c_master_read(0x01, hola, 2);
-    //i2c_master_write(0x02,hola , 2);
-  
 }
-/*
-// Common ISR for I2C Module
 #pragma vector=USART0TX_VECTOR
+
 __interrupt void I2C_ISR(void)
 {
   switch(I2CIV)
@@ -55,7 +47,9 @@ __interrupt void I2C_ISR(void)
   case 14: break;                          // General Call
   case 16: break;                          // Start Condition
   }
-}*/
+}
+
+
   // Interrupciones 
 
 
@@ -63,19 +57,11 @@ __interrupt void I2C_ISR(void)
 #define CONV(x)      (3.3*x)/4095.0			// convertir x en voltaje
 
 // Timer A0 rutina de servicio de interrupción
+
 #pragma vector = TIMERA0_VECTOR
 __interrupt void Timer_A (void)
 
 { 
-  data[0]=adc_single_channel_single_conv(0);
-  //adc_single_channel_single_conv_it(0);
-  //adc_init_seq_channel_single_conv();  
- 
-  
-  //i2c_master_write(0x00 , &data[0] , 2);
-  
-  i2c_master_write(0x22, &data[0] , 2);
-
-  
-  
+  data[0]=adc_single_channel_single_conv(0);  // hace una conversion analoga a digital y la guarda en el arreglo data
+  i2c_master_write(0x22, &data[0] , 2);       // envia la informacion que hay en data[0] al slave
 }
