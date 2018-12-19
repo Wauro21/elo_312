@@ -45,7 +45,7 @@ __interrupt void I2C_ISR(void)
      {
        count = 0;                           //Si se excede el maximo del array, contador vuelve a cero
      }
-     TBCCR1=(19 + ((PWM[2]<<8)|PWM[1])*(3.3/4095)*65);
+      pwm_change(PWM);                      //Modificacion de duty cycle
      break;                     
  }
 }
