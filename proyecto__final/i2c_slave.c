@@ -8,8 +8,7 @@
 #define I2C_SDA_PIN BIT1
 #define BYTE_NUMBER 0x02
 // ----> Variables utiles <---- //
-//static unsigned int PWM[2];
-static unsigned int save_count=0;
+
 //Funcion incializacion I2C
 void i2c_init(unsigned int slave_address, int i2c_mode)
 {
@@ -43,24 +42,5 @@ void slave_reads(unsigned int* save, unsigned int address)
   else
   {
     save_count = save_count+ 0x01;
-  }
-  
+  } 
 }
-    //  while(!((I2CIFG & RXRDYIFG)==RXRDYIFG));
-//  unsigned int count = 0x00;
-//  for(count = 0x00; (count < 6); count++)
-//  {
-//    if(I2CDRB%3 != 0)
-//    {
-//      if((count == 0x01) | (count == 0x04))
-//      {
-//        *(save+count-1) = (I2CDRB<<8);
-//      }
-//      else
-//      {
-//        *(save + count-1) |= I2CDRB;
-//      }
-//    }
-//  }
-//}
-
